@@ -1,5 +1,61 @@
-.vercel/
-node_modules/
-firebase-debug.log
-*.log
-aetkdem-copa-estado-mexico/
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Administrador de contenido | AETKDEM</title>
+    <link rel="stylesheet" href="styles.css?v=20260429-firebase-admin" />
+  </head>
+  <body class="admin-page">
+    <header class="admin-header">
+      <div class="wrap admin-top">
+        <div>
+          <p class="kicker">Panel administrativo</p>
+          <h1>Administrador de contenido</h1>
+        </div>
+        <a class="button-link" href="index.html">Ver sitio público</a>
+      </div>
+    </header>
+
+    <main class="wrap admin-blank" aria-label="Área de administración">
+      <section class="admin-login-card" data-admin-login>
+        <h2>Acceso de administrador</h2>
+        <p>Inicia sesión para habilitar herramientas de edición y carga de información.</p>
+        <form id="admin-login-form">
+          <label>
+            Correo
+            <input id="admin-email" type="email" autocomplete="username" required />
+          </label>
+          <label>
+            Contraseña
+            <input id="admin-password" type="password" autocomplete="current-password" required />
+          </label>
+          <div class="form-actions">
+            <button type="submit">Entrar</button>
+          </div>
+          <p class="admin-status" id="admin-login-status"></p>
+        </form>
+      </section>
+
+      <section class="admin-wide-panel admin-only">
+        <div class="admin-panel-header">
+          <h2>Eventos programados</h2>
+          <button class="secondary" type="button" id="admin-logout">Cerrar sesión</button>
+        </div>
+
+        <article class="admin-event-row">
+          <div>
+            <span class="admin-event-date">29, 30 y 31 de mayo de 2026</span>
+            <h3>Copa Estado de México</h3>
+            <p>Combate y Poomsae · Zinacantepec, Toluca</p>
+          </div>
+          <a class="admin-event-link" href="convocatoria-copa-estado-mexico.html">Ver convocatoria</a>
+        </article>
+      </section>
+    </main>
+
+    <script src="assets/firebase-config.js?v=20260429-firebase-admin"></script>
+    <script type="module" src="assets/admin-auth.js?v=20260429-firebase-admin"></script>
+    <script type="module" src="assets/admin-mode.js?v=20260429-secure-admin-mode"></script>
+  </body>
+</html>
