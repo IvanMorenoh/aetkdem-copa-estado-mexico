@@ -1,0 +1,75 @@
+.division-detail-page {
+  padding-top: 0;
+}
+
+.division-sticky-card {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin: 0 calc(50% - 50vw) 42px;
+  padding: 18px max(22px, calc((100vw - 1140px) / 2)) 28px;
+  border-left: 0;
+  border-bottom: 4px solid var(--green);
+  box-shadow: 0 12px 26px rgba(20, 40, 74, 0.22);
+}
+
+.division-sticky-card .kicker {
+  margin-bottom: 6px;
+  color: #fff;
+  font-size: 13px;
+}
+
+.division-sticky-card h1 {
+  max-width: 100%;
+  font-size: clamp(30px, 5vw, 48px);
+  line-height: 1.02;
+  overflow-wrap: anywhere;
+}
+
+.division-sticky-card p:last-child {
+  margin-top: 8px;
+  font-size: clamp(15px, 2vw, 19px);
+}
+
+.division-back-button {
+  position: absolute;
+  left: max(18px, calc((100vw - 1140px) / 2));
+  bottom: -20px;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  padding: 0 16px;
+  background: #fff;
+  color: var(--blue-dark);
+  font-weight: 900;
+  box-shadow: 0 10px 22px rgba(20, 40, 74, 0.18);
+}
+
+.division-back-button:hover,
+.division-back-button:focus-visible {
+  background: var(--green);
+  color: #fff;
+}
+
+.division-athlete-card {
+  margin-top: 0;
+}
+
+@media (max-width: 700px) {
+  .division-sticky-card {
+    margin-bottom: 38px;
+    padding: 16px 16px 26px;
+  }
+
+  .division-sticky-card h1 {
+    font-size: clamp(26px, 8vw, 36px);
+  }
+
+  .division-back-button {
+    left: 16px;
+    min-height: 38px;
+    padding: 0 14px;
+  }
+}
