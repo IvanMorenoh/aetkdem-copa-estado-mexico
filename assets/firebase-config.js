@@ -26,10 +26,10 @@ window.AETKDEM_FIREBASE_CONFIG = {
     }
 
     .brand-logo-mark {
+      position: relative;
       width: 78px;
       height: 74px;
-      display: grid;
-      place-items: start center;
+      display: block;
       overflow: hidden;
       border: 5px solid #d6dce4;
       border-radius: 12px;
@@ -39,10 +39,13 @@ window.AETKDEM_FIREBASE_CONFIG = {
     }
 
     .brand-logo-mark img {
+      position: absolute;
+      top: 0;
+      left: 50%;
       width: 190px;
       max-width: none;
       height: auto;
-      transform: translateY(0);
+      transform: translateX(-50%);
     }
 
     .brand-logo-text {
@@ -101,7 +104,7 @@ window.AETKDEM_FIREBASE_CONFIG = {
 
       .brand-logo-mark img {
         width: 140px;
-        transform: translateY(0);
+        transform: translateX(-50%);
       }
 
       .brand-logo-text {
@@ -122,7 +125,7 @@ window.AETKDEM_FIREBASE_CONFIG = {
 })();
 
 (function loadAetkdemLogo() {
-  const logoPath = "assets/aetkdem-logo-header.webp.base64?v=20260503-logo-mark-text";
+  const logoPath = "assets/aetkdem-logo-header.webp.base64?v=20260503-logo-mark-centered";
 
   function applyLogo() {
     const logoSrc = window.AETKDEM_LOGO_SRC;
