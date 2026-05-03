@@ -15,11 +15,70 @@ window.AETKDEM_FIREBASE_CONFIG = {
   const style = document.createElement("style");
   style.id = "aetkdem-global-header-rules";
   style.textContent = `
+    .brand-mark.brand-mark-real {
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: #fff;
+      border-color: #d4d7dc;
+    }
+
+    .brand-mark-real .brand-logo-image {
+      width: 152%;
+      max-width: none;
+      height: auto;
+      transform: translateY(-8%);
+    }
+
     @media (max-width: 700px) {
       .social-strip { display: block !important; }
     }
+
+    @media (max-width: 620px) {
+      .brand-mark-real .brand-logo-image {
+        width: 156%;
+        transform: translateY(-7%);
+      }
+    }
   `;
   document.head.appendChild(style);
+})();
+
+(function loadAetkdemLogoMark() {
+  const logoPath = "assets/aetkdem-logo-header.webp.base64?v=20260503-logo";
+
+  function applyLogoMark() {
+    const logoSrc = window.AETKDEM_LOGO_MARK_SRC;
+    if (!logoSrc) return;
+
+    document.querySelectorAll(".brand-mark").forEach((mark) => {
+      if (mark.dataset.logoReady === "true") return;
+      mark.classList.add("brand-mark-real");
+      mark.innerHTML = `<img class="brand-logo-image" src="${logoSrc}" alt="" aria-hidden="true">`;
+      mark.dataset.logoReady = "true";
+    });
+  }
+
+  window.AETKDEM_APPLY_LOGO_MARK = applyLogoMark;
+
+  fetch(logoPath)
+    .then((response) => {
+      if (!response.ok) throw new Error("No se pudo cargar el logo AETKDEM.");
+      return response.text();
+    })
+    .then((content) => {
+      window.AETKDEM_LOGO_MARK_SRC = `data:image/webp;base64,${content.trim()}`;
+      applyLogoMark();
+    })
+    .catch(() => {
+      // Si el logo no carga, el ícono CSS original queda como respaldo.
+    });
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", applyLogoMark);
+  } else {
+    applyLogoMark();
+  }
 })();
 
 (function injectAetkdemHeader() {
@@ -55,6 +114,7 @@ window.AETKDEM_FIREBASE_CONFIG = {
     `;
 
     document.body.insertBefore(header, document.body.firstChild);
+    if (window.AETKDEM_APPLY_LOGO_MARK) window.AETKDEM_APPLY_LOGO_MARK();
   }
 
   if (document.readyState === "loading") {
