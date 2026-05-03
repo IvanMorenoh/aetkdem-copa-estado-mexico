@@ -23,7 +23,11 @@
               <span>Categoría</span>
               <h2>Infantil</h2>
             </div>
-            <button class="category-admin-button admin-only" type="button">Cargar Excel</button>
+            <div class="category-upload admin-only">
+              <button class="category-admin-button" type="button" data-athlete-upload-button>Cargar Excel</button>
+              <input class="visually-hidden" type="file" accept=".xlsx,.xls,.csv" data-athlete-upload-input />
+              <p class="upload-status" data-athlete-upload-status></p>
+            </div>
           </div>
           <div class="division-grid" aria-label="Divisiones infantil femenil">
             <a class="division-card" href="#">-27 kg</a>
@@ -45,7 +49,11 @@
               <span>Categoría</span>
               <h2>Cadetes</h2>
             </div>
-            <button class="category-admin-button admin-only" type="button">Cargar Excel</button>
+            <div class="category-upload admin-only">
+              <button class="category-admin-button" type="button" data-athlete-upload-button>Cargar Excel</button>
+              <input class="visually-hidden" type="file" accept=".xlsx,.xls,.csv" data-athlete-upload-input />
+              <p class="upload-status" data-athlete-upload-status></p>
+            </div>
           </div>
           <div class="division-grid" aria-label="Divisiones cadetes femenil">
             <a class="division-card" href="#">-29 kg</a>
@@ -67,7 +75,11 @@
               <span>Categoría</span>
               <h2>Junior</h2>
             </div>
-            <button class="category-admin-button admin-only" type="button">Cargar Excel</button>
+            <div class="category-upload admin-only">
+              <button class="category-admin-button" type="button" data-athlete-upload-button>Cargar Excel</button>
+              <input class="visually-hidden" type="file" accept=".xlsx,.xls,.csv" data-athlete-upload-input />
+              <p class="upload-status" data-athlete-upload-status></p>
+            </div>
           </div>
           <div class="division-grid" aria-label="Divisiones junior femenil">
             <a class="division-card" href="#">-42 kg</a>
@@ -89,7 +101,11 @@
               <span>Categoría</span>
               <h2>Senior</h2>
             </div>
-            <button class="category-admin-button admin-only" type="button">Cargar Excel</button>
+            <div class="category-upload admin-only">
+              <button class="category-admin-button" type="button" data-athlete-upload-button>Cargar Excel</button>
+              <input class="visually-hidden" type="file" accept=".xlsx,.xls,.csv" data-athlete-upload-input />
+              <p class="upload-status" data-athlete-upload-status></p>
+            </div>
           </div>
           <div class="division-grid" aria-label="Divisiones senior femenil">
             <a class="division-card" href="#">-46 kg</a>
@@ -105,7 +121,8 @@
       </section>
     </main>
     <script src="assets/firebase-config.js?v=20260429-firebase-admin"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script type="module" src="assets/admin-mode.js?v=20260429-secure-admin-mode"></script>
-    <script src="assets/athletes.js?v=20260429-admin-excel"></script>
+    <script src="assets/athletes.js?v=20260502-inline-excel"></script>
   </body>
 </html>
