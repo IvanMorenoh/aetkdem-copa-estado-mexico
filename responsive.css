@@ -170,7 +170,7 @@ main,
   }
 
   .social-strip {
-    display: none;
+    display: block;
   }
 
   .brand-row-inner {
