@@ -4,14 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Asociación Estatal de Taekwondo del Estado de México</title>
-    <link rel="stylesheet" href="styles.css?v=20260428-fecha-izquierda" />
+    <link rel="stylesheet" href="styles.css?v=20260503-admin-logout" />
     <link rel="stylesheet" href="responsive.css?v=20260503-mobile-pass" />
   </head>
   <body>
     <header class="site-header">
       <div class="social-strip">
         <div class="wrap strip-inner">
-          <a class="admin-shortcut" href="admin.html">Admin</a>
+          <div class="admin-session-actions">
+            <a class="admin-shortcut" href="admin.html">Admin</a>
+            <button class="admin-logout-shortcut admin-only" type="button" data-admin-logout hidden aria-hidden="true">Cerrar sesión</button>
+          </div>
         </div>
       </div>
 
@@ -113,6 +116,8 @@
       </div>
     </footer>
 
+    <script src="assets/firebase-config.js?v=20260429-firebase-admin"></script>
     <script src="assets/app.js?v=20260429-abrir-convocatoria"></script>
+    <script type="module" src="assets/admin-mode.js?v=20260503-admin-logout"></script>
   </body>
 </html>
