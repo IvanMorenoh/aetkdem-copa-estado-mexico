@@ -29,7 +29,7 @@ window.AETKDEM_FIREBASE_CONFIG = {
       width: 78px;
       height: 74px;
       display: grid;
-      place-items: center;
+      place-items: start center;
       overflow: hidden;
       border: 5px solid #d6dce4;
       border-radius: 12px;
@@ -39,10 +39,10 @@ window.AETKDEM_FIREBASE_CONFIG = {
     }
 
     .brand-logo-mark img {
-      width: 142px;
+      width: 190px;
       max-width: none;
       height: auto;
-      transform: translateY(-22px);
+      transform: translateY(0);
     }
 
     .brand-logo-text {
@@ -100,8 +100,8 @@ window.AETKDEM_FIREBASE_CONFIG = {
       }
 
       .brand-logo-mark img {
-        width: 105px;
-        transform: translateY(-16px);
+        width: 140px;
+        transform: translateY(0);
       }
 
       .brand-logo-text {
