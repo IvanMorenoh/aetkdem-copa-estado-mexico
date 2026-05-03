@@ -2,6 +2,9 @@
   const showAfterPixels = 260;
 
   function createButton() {
+    const existingButton = document.querySelector(".scroll-top-button");
+    if (existingButton) return existingButton;
+
     const button = document.createElement("button");
     button.className = "scroll-top-button";
     button.type = "button";
@@ -15,7 +18,7 @@
     button.classList.toggle("is-visible", window.scrollY > showAfterPixels);
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
+  function initScrollTop() {
     const button = createButton();
 
     button.addEventListener("click", () => {
@@ -24,5 +27,11 @@
 
     updateVisibility(button);
     window.addEventListener("scroll", () => updateVisibility(button), { passive: true });
-  });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initScrollTop);
+  } else {
+    initScrollTop();
+  }
 })();
