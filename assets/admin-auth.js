@@ -21,6 +21,23 @@ function withTimeout(promise, ms, message) {
   ]);
 }
 
+function getFriendlyAuthError(error) {
+  const code = error?.code || "";
+
+  const messages = {
+    "auth/invalid-credential": "No se pudo iniciar sesión: el correo o la contraseña no coinciden con Firebase.",
+    "auth/user-not-found": "No existe una cuenta registrada con ese correo en Firebase Authentication.",
+    "auth/wrong-password": "La contraseña no coincide con ese correo.",
+    "auth/invalid-email": "El correo no tiene un formato válido.",
+    "auth/user-disabled": "Esta cuenta está deshabilitada en Firebase Authentication.",
+    "auth/too-many-requests": "Firebase bloqueó temporalmente el acceso por demasiados intentos. Espera unos minutos e intenta de nuevo.",
+    "auth/network-request-failed": "No se pudo conectar con Firebase. Revisa tu conexión e intenta otra vez.",
+    "permission-denied": "La cuenta inició sesión, pero Firebase no permitió revisar permisos de administrador.",
+  };
+
+  return messages[code] || error?.message || "No se pudo iniciar sesión. Revisa correo y contraseña.";
+}
+
 function setAdminState(user) {
   if (user) {
     document.documentElement.classList.add("is-admin");
@@ -44,12 +61,12 @@ if (!firebaseReady()) {
       const hasAccess = user ? await isAdminUser(user) : false;
       setAdminState(user && hasAccess ? user : null);
       if (user && !hasAccess && status) {
-        status.textContent = "Tu cuenta no está asignada como administradora. Revisa el UID en Firestore.";
+        status.textContent = `Tu cuenta inició sesión, pero no está autorizada como admin. UID: ${user.uid}`;
       }
     } catch (error) {
       setAdminState(null);
       if (status) {
-        status.textContent = "No se pudo validar el permiso de administrador. Revisa reglas y UID.";
+        status.textContent = getFriendlyAuthError(error);
       }
     }
   });
@@ -65,7 +82,7 @@ if (loginForm) {
       status.textContent = "Validando acceso...";
       const credential = await withTimeout(
         loginAdmin(
-          document.querySelector("#admin-email").value,
+          document.querySelector("#admin-email").value.trim(),
           document.querySelector("#admin-password").value
         ),
         12000,
@@ -89,7 +106,7 @@ if (loginForm) {
       status.textContent = "";
     } catch (error) {
       setAdminState(null);
-      status.textContent = error.message || "No se pudo iniciar sesión. Revisa correo y contraseña.";
+      status.textContent = getFriendlyAuthError(error);
     } finally {
       loginInProgress = false;
     }
