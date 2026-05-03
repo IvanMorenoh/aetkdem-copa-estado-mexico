@@ -93,7 +93,7 @@
 
   async function getFirebaseApi() {
     try {
-      const api = await import("./firebase-app.js?v=20260502-batch-writes");
+      const api = await import("./firebase-app.js?v=20260503-delete-athletes");
       return api.firebaseReady() ? api : null;
     } catch {
       return null;
@@ -113,6 +113,17 @@
     const athletes = await api.fetchAthletes();
     setAthletes(athletes);
     return athletes;
+  }
+
+  async function deleteAthletesDatabase() {
+    const api = await getFirebaseApi();
+    if (!api || !(await currentUserCanWrite())) throw new Error("not-admin");
+    const deleted = await api.deleteAthletes();
+    setAthletes([]);
+    updateDivisionLinks();
+    renderDivisionPage();
+    renderAthleteAdminSummary();
+    return deleted;
   }
 
   function filterAthletes({ rama, categoria, division }) {
@@ -237,10 +248,14 @@
       }
     });
 
-    clearButton.addEventListener("click", () => {
-      setAthletes([]);
-      status.textContent = "Listado de atletas eliminado.";
-      renderAthleteAdminSummary();
+    clearButton?.addEventListener("click", async () => {
+      if (!window.confirm("¿Seguro que quieres eliminar todos los atletas registrados? Esta acción no se puede deshacer.")) return;
+      try {
+        const deleted = await deleteAthletesDatabase();
+        status.textContent = `Base de datos eliminada. Se borraron ${deleted} atletas.`;
+      } catch (error) {
+        status.textContent = "No se pudo eliminar la base de datos. Revisa tu acceso de administrador.";
+      }
     });
 
     renderAthleteAdminSummary();
@@ -292,6 +307,26 @@
           if (status) status.textContent = "No se pudo leer el archivo. Revisa el formato o tu acceso de administrador.";
         } finally {
           input.value = "";
+        }
+      });
+    });
+
+    document.querySelectorAll("[data-athlete-delete-button]").forEach((button) => {
+      const wrapper = button.closest(".gender-admin-action, .category-upload") || button.parentElement;
+      const status = wrapper?.querySelector("[data-athlete-upload-status]");
+
+      button.addEventListener("click", async () => {
+        if (!window.confirm("¿Seguro que quieres eliminar todos los atletas registrados? Esta acción no se puede deshacer.")) return;
+        button.disabled = true;
+        if (status) status.textContent = "Eliminando atletas...";
+
+        try {
+          const deleted = await deleteAthletesDatabase();
+          if (status) status.textContent = `Base de datos eliminada. Se borraron ${deleted} atletas.`;
+        } catch (error) {
+          if (status) status.textContent = "No se pudo eliminar la base de datos. Revisa tu acceso de administrador.";
+        } finally {
+          button.disabled = false;
         }
       });
     });
@@ -431,6 +466,7 @@
     initAthleteImport,
     initInlineAthleteUploads,
     syncAthletesFromCloud,
+    deleteAthletesDatabase,
   };
 
   document.addEventListener("DOMContentLoaded", async () => {
