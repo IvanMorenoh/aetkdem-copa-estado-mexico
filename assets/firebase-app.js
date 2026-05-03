@@ -19,6 +19,7 @@ import {
 
 const config = window.AETKDEM_FIREBASE_CONFIG;
 const isConfigured = config && !String(config.apiKey || "").startsWith("REEMPLAZAR");
+const firestoreBatchLimit = 450;
 
 let app = null;
 let auth = null;
@@ -33,6 +34,16 @@ if (isConfigured) {
 function requireConfigured() {
   if (!isConfigured) {
     throw new Error("Firebase no está configurado todavía.");
+  }
+}
+
+async function commitChunkedBatch(items, handler) {
+  for (let start = 0; start < items.length; start += firestoreBatchLimit) {
+    const batch = writeBatch(db);
+    items.slice(start, start + firestoreBatchLimit).forEach((item, index) => {
+      handler(batch, item, start + index);
+    });
+    await batch.commit();
   }
 }
 
@@ -72,19 +83,19 @@ export async function logoutAdmin() {
 
 export async function replaceAthletes(athletes) {
   requireConfigured();
-  const batch = writeBatch(db);
   const existing = await getDocs(collection(db, "athletes"));
-  existing.forEach((snapshot) => batch.delete(snapshot.ref));
+  await commitChunkedBatch(existing.docs, (batch, snapshot) => {
+    batch.delete(snapshot.ref);
+  });
 
-  athletes.forEach((athlete, index) => {
+  const uploadedAt = new Date().toISOString();
+  await commitChunkedBatch(athletes, (batch, athlete, index) => {
     const id = `${athlete.rama}-${athlete.categoria}-${athlete.division}-${index}`.replace(/[^\w-]/g, "_");
     batch.set(doc(db, "athletes", id), {
       ...athlete,
-      uploadedAt: new Date().toISOString(),
+      uploadedAt,
     });
   });
-
-  await batch.commit();
 }
 
 export async function fetchAthletes(filters = {}) {
