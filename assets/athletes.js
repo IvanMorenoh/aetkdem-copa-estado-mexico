@@ -2,19 +2,35 @@
   const athleteStorageKey = "aetkdem-athletes";
 
   const fieldAliases = {
-    rama: ["rama", "genero", "sexo"],
-    categoria: ["categoria", "categoría"],
-    division: ["division", "división", "peso"],
-    nombre: ["nombre", "atleta", "competidor", "competidora", "nombre del competidor"],
-    escuela: ["escuela", "academia", "club", "institucion", "institución"],
-    entrenador: ["entrenador", "coach", "profesor"],
-    grado: ["grado", "cinta", "cinturon", "cinturón"],
+    rama: ["rama", "genero", "género", "sexo", "categoria rama", "categoría rama", "branch"],
+    categoria: ["categoria", "categoría", "cat", "category", "clase", "edad", "division de edad", "división de edad"],
+    division: ["division", "división", "peso", "categoria de peso", "categoría de peso", "division peso", "división peso", "kg"],
+    nombre: [
+      "nombre",
+      "atleta",
+      "competidor",
+      "competidora",
+      "nombre del competidor",
+      "nombre del atleta",
+      "nombre completo",
+      "participante",
+      "deportista",
+      "alumno",
+      "alumna",
+    ],
+    escuela: ["escuela", "academia", "club", "institucion", "institución", "equipo", "dojang", "asociacion", "asociación"],
+    entrenador: ["entrenador", "coach", "profesor", "maestro", "instructor"],
+    grado: ["grado", "cinta", "cinturon", "cinturón", "kup", "dan"],
   };
+
+  const knownFields = Object.keys(fieldAliases);
 
   function normalize(value) {
     return String(value || "")
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[\n\r\t]+/g, " ")
+      .replace(/\s+/g, " ")
       .trim()
       .toLowerCase();
   }
@@ -34,30 +50,45 @@
 
   function normalizeCategory(value) {
     const category = normalize(value);
-    if (category === "cadete") return "cadetes";
-    if (category === "juvenil") return "junior";
+    if (category === "cadete" || category === "cadet") return "cadetes";
+    if (category === "juvenil" || category === "junior") return "junior";
+    if (category === "infantiles") return "infantil";
     return category;
   }
 
+  function normalizeRama(value) {
+    const rama = normalize(value);
+    if (["f", "fem", "femenino", "mujer", "mujeres", "female"].includes(rama)) return "femenil";
+    if (["m", "masc", "masculino", "hombre", "hombres", "male"].includes(rama)) return "varonil";
+    return rama;
+  }
+
+  function aliasesFor(field) {
+    return (fieldAliases[field] || [field]).map(normalize);
+  }
+
+  function fieldForHeader(header) {
+    const normalizedHeader = normalize(header);
+    return knownFields.find((field) => aliasesFor(field).includes(normalizedHeader));
+  }
+
   function getValue(row, field) {
-    const aliases = fieldAliases[field] || [field];
+    const aliases = aliasesFor(field);
     const key = Object.keys(row).find((candidate) => aliases.includes(normalize(candidate)));
     return key ? String(row[key] || "").trim() : "";
   }
 
-  function normalizeAthlete(row) {
+  function normalizeAthlete(row, defaults = {}) {
     const athlete = {
-      rama: normalize(getValue(row, "rama")),
-      categoria: normalizeCategory(getValue(row, "categoria")),
-      division: cleanDivision(getValue(row, "division")),
+      rama: normalizeRama(getValue(row, "rama") || defaults.rama),
+      categoria: normalizeCategory(getValue(row, "categoria") || defaults.categoria),
+      division: cleanDivision(getValue(row, "division") || defaults.division),
       nombre: getValue(row, "nombre"),
       escuela: getValue(row, "escuela"),
       entrenador: getValue(row, "entrenador"),
       grado: getValue(row, "grado"),
     };
 
-    if (athlete.rama === "femenino") athlete.rama = "femenil";
-    if (athlete.rama === "masculino" || athlete.rama === "hombre") athlete.rama = "varonil";
     return athlete;
   }
 
@@ -98,13 +129,13 @@
   }
 
   function filterAthletes({ rama, categoria, division }) {
-    const normalizedRama = normalize(rama);
+    const normalizedRama = normalizeRama(rama);
     const normalizedCategory = normalizeCategory(categoria);
     const normalizedDivision = cleanDivision(division);
 
     return getAthletes().filter((athlete) => {
       return (
-        normalize(athlete.rama) === normalizedRama &&
+        normalizeRama(athlete.rama) === normalizedRama &&
         normalizeCategory(athlete.categoria) === normalizedCategory &&
         cleanDivision(athlete.division) === normalizedDivision
       );
@@ -125,7 +156,7 @@
       const pageTitle = document.querySelector(".detail-hero h1")?.textContent || "";
       const categoryTitle = categoryCard.querySelector(".category-heading h2")?.textContent || "";
       categoryCard.querySelectorAll(".division-card").forEach((link) => {
-        link.dataset.rama = normalize(pageTitle);
+        link.dataset.rama = normalizeRama(pageTitle);
         link.dataset.categoria = normalizeCategory(categoryTitle);
         link.dataset.division = cleanDivision(link.childNodes[0]?.textContent || link.textContent);
       });
@@ -199,7 +230,7 @@
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
+      .replace(/\"/g, "&quot;")
       .replace(/'/g, "&#039;");
   }
 
@@ -217,8 +248,8 @@
       if (!file) return;
 
       try {
-        const athletes = await importAthletesFile(file);
-        status.textContent = `Se importaron ${athletes.length} atletas.`;
+        const result = await importAthletesFile(file);
+        status.textContent = makeImportMessage(result);
         renderAthleteAdminSummary();
       } catch (error) {
         status.textContent = "No se pudo leer el archivo. Revisa el formato del Excel o CSV.";
@@ -234,21 +265,34 @@
     renderAthleteAdminSummary();
   }
 
-  async function importAthletesFile(file) {
+  function makeImportMessage(result) {
+    if (result.imported) return `Se cargaron ${result.imported} atletas.`;
+    return "Se cargaron 0 atletas. Revisa que el archivo tenga nombre y división; rama/categoría pueden venir en columnas o desde esta pantalla.";
+  }
+
+  async function importAthletesFile(file, defaults = {}) {
     const rows = await readSpreadsheet(file);
     const athletes = rows
-      .map(normalizeAthlete)
+      .map((row) => normalizeAthlete(row, defaults))
       .filter((athlete) => athlete.rama && athlete.categoria && athlete.division && athlete.nombre);
 
     setAthletes(athletes);
     const api = await getFirebaseApi();
     if (api) await api.replaceAthletes(athletes);
-    return athletes;
+    return { athletes, imported: athletes.length, read: rows.length };
+  }
+
+  function defaultsFromUploadButton(button) {
+    const categoryCard = button.closest(".category-card");
+    return {
+      rama: document.querySelector(".detail-hero h1")?.textContent || "",
+      categoria: categoryCard?.querySelector(".category-heading h2")?.textContent || "",
+    };
   }
 
   function initInlineAthleteUploads() {
     document.querySelectorAll("[data-athlete-upload-button]").forEach((button) => {
-      const wrapper = button.closest(".gender-admin-action") || button.parentElement;
+      const wrapper = button.closest(".gender-admin-action, .category-upload") || button.parentElement;
       const input = wrapper?.querySelector("[data-athlete-upload-input]");
       const status = wrapper?.querySelector("[data-athlete-upload-status]");
       if (!input) return;
@@ -262,11 +306,11 @@
           if (!(await currentUserCanWrite())) {
             throw new Error("not-admin");
           }
-          const athletes = await importAthletesFile(file);
-          if (status) status.textContent = `Se cargaron ${athletes.length} atletas.`;
+          const result = await importAthletesFile(file, defaultsFromUploadButton(button));
+          if (status) status.textContent = makeImportMessage(result);
           updateDivisionLinks();
         } catch (error) {
-          if (status) status.textContent = "No se pudo leer el archivo. Revisa el formato.";
+          if (status) status.textContent = "No se pudo leer el archivo. Revisa el formato o tu acceso de administrador.";
         } finally {
           input.value = "";
         }
@@ -310,8 +354,12 @@
         try {
           if (!window.XLSX) throw new Error("XLSX library unavailable");
           const workbook = window.XLSX.read(reader.result, { type: "array" });
-          const sheet = workbook.Sheets[workbook.SheetNames[0]];
-          resolve(window.XLSX.utils.sheet_to_json(sheet, { defval: "" }));
+          const rows = workbook.SheetNames.flatMap((sheetName) => {
+            const sheet = workbook.Sheets[sheetName];
+            const matrix = window.XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "", blankrows: false });
+            return rowsFromMatrix(matrix);
+          });
+          resolve(rows);
         } catch (error) {
           reject(error);
         }
@@ -321,22 +369,46 @@
     });
   }
 
+  function rowsFromMatrix(matrix) {
+    const headerIndex = findHeaderRow(matrix);
+    if (headerIndex === -1) return [];
+
+    const headers = matrix[headerIndex].map((cell, index) => String(cell || `Columna ${index + 1}`).trim());
+    return matrix
+      .slice(headerIndex + 1)
+      .map((cells) => headers.reduce((row, header, index) => {
+        row[header] = cells[index] || "";
+        return row;
+      }, {}))
+      .filter((row) => Object.values(row).some((value) => String(value || "").trim()));
+  }
+
+  function findHeaderRow(matrix) {
+    let bestIndex = -1;
+    let bestScore = 0;
+
+    matrix.slice(0, 40).forEach((row, index) => {
+      const fields = new Set(row.map(fieldForHeader).filter(Boolean));
+      const score = fields.size + (fields.has("nombre") ? 2 : 0) + (fields.has("division") ? 1 : 0);
+      if (score > bestScore) {
+        bestScore = score;
+        bestIndex = index;
+      }
+    });
+
+    return bestScore >= 2 ? bestIndex : -1;
+  }
+
   function readCsv(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => {
         try {
-          const lines = String(reader.result || "").split(/\r?\n/).filter(Boolean);
-          const headers = parseCsvLine(lines.shift() || "");
-          resolve(
-            lines.map((line) => {
-              const cells = parseCsvLine(line);
-              return headers.reduce((row, header, index) => {
-                row[header] = cells[index] || "";
-                return row;
-              }, {});
-            })
-          );
+          const matrix = String(reader.result || "")
+            .split(/\r?\n/)
+            .filter(Boolean)
+            .map(parseCsvLine);
+          resolve(rowsFromMatrix(matrix));
         } catch (error) {
           reject(error);
         }
@@ -351,8 +423,13 @@
     let current = "";
     let quoted = false;
 
-    for (const char of line) {
-      if (char === '"') {
+    for (let index = 0; index < line.length; index += 1) {
+      const char = line[index];
+      const next = line[index + 1];
+      if (char === '"' && quoted && next === '"') {
+        current += '"';
+        index += 1;
+      } else if (char === '"') {
         quoted = !quoted;
       } else if (char === "," && !quoted) {
         result.push(current.trim());
