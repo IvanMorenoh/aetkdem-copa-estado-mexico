@@ -93,7 +93,7 @@
 
   async function getFirebaseApi() {
     try {
-      const api = await import("./firebase-app.js");
+      const api = await import("./firebase-app.js?v=20260502-batch-writes");
       return api.firebaseReady() ? api : null;
     } catch {
       return null;
