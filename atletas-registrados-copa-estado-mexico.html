@@ -3,9 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Atletas registrados | Copa Estado de México</title>
+    <title>Atletas y coaches registrados | Copa Estado de Mexico</title>
     <link rel="stylesheet" href="styles.css?v=20260503-admin-logout" />
     <link rel="stylesheet" href="responsive.css?v=20260503-mobile-pass" />
+    <link rel="stylesheet" href="assets/registered-cards.css?v=20260503-four-cards" />
   </head>
   <body>
     <header class="site-header">
@@ -13,7 +14,7 @@
         <div class="wrap strip-inner">
           <div class="admin-session-actions">
             <a class="admin-shortcut" href="admin.html">Admin</a>
-            <button class="admin-logout-shortcut admin-only" type="button" data-admin-logout hidden aria-hidden="true">Cerrar sesión</button>
+            <button class="admin-logout-shortcut admin-only" type="button" data-admin-logout hidden aria-hidden="true">Cerrar sesion</button>
           </div>
         </div>
       </div>
@@ -27,7 +28,7 @@
             </span>
             <span>
               <strong>AETKDEM</strong>
-              <small>Asociación Estatal de Taekwondo del Estado de México A.C.</small>
+              <small>Asociacion Estatal de Taekwondo del Estado de Mexico A.C.</small>
             </span>
           </a>
         </div>
@@ -38,14 +39,14 @@
       <a class="back-link" href="convocatoria-copa-estado-mexico.html">Regresar a convocatoria</a>
 
       <section class="detail-hero">
-        <p class="kicker">Copa Estado de México</p>
-        <h1>Atletas registrados</h1>
-        <p>Consulta por categoría y división</p>
+        <p class="kicker">Copa Estado de Mexico</p>
+        <h1>Atletas y coaches registrados</h1>
+        <p>Consulta por modalidad y rama</p>
       </section>
 
-      <section class="gender-selection" aria-label="Seleccionar rama">
+      <section class="gender-selection" aria-label="Seleccionar modalidad o rama">
         <a class="gender-card" href="atletas-femenil-copa-estado-mexico.html">
-          <span>Femenil</span>
+          <span>Combate Femenil</span>
           <img
             src="assets/femenil-card.png"
             alt="Atleta femenil de taekwondo"
@@ -53,12 +54,31 @@
         </a>
 
         <a class="gender-card" href="atletas-varonil-copa-estado-mexico.html">
-          <span>Varonil</span>
+          <span>Combate Varonil</span>
           <img
             src="assets/varonil-card.png"
             alt="Atleta varonil de taekwondo"
           />
         </a>
+
+        <article class="gender-card">
+          <span>Atletas de Poomsae</span>
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            alt="Atletas de poomsae"
+            data-base64-image="assets/poomsae-card.jpg.base64"
+          />
+        </article>
+
+        <article class="gender-card">
+          <span>Coaches</span>
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+            alt="Coaches de taekwondo"
+            data-base64-image="assets/coaches-card.jpg.base64"
+          />
+        </article>
+
         <div class="gender-admin-action admin-only" hidden aria-hidden="true">
           <div class="form-actions">
             <button class="category-admin-button" type="button" data-athlete-upload-button>Cargar Excel</button>
@@ -73,8 +93,8 @@
     <footer id="contacto" class="site-footer">
       <div class="wrap footer-main">
         <div>
-          <strong>Asociación Estatal de Taekwondo del Estado de México</strong>
-          <p>Información oficial para atletas, entrenadores, escuelas afiliadas y comunidad deportiva.</p>
+          <strong>Asociacion Estatal de Taekwondo del Estado de Mexico</strong>
+          <p>Informacion oficial para atletas, entrenadores, escuelas afiliadas y comunidad deportiva.</p>
         </div>
       </div>
     </footer>
@@ -82,5 +102,17 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="assets/athletes.js?v=20260503-delete-athletes"></script>
     <script type="module" src="assets/admin-mode.js?v=20260503-admin-logout"></script>
+    <script>
+      document.querySelectorAll("[data-base64-image]").forEach(async (image) => {
+        try {
+          const response = await fetch(image.dataset.base64Image);
+          if (!response.ok) return;
+          const base64 = (await response.text()).trim();
+          image.src = `data:image/jpeg;base64,${base64}`;
+        } catch (error) {
+          image.removeAttribute("data-base64-image");
+        }
+      });
+    </script>
   </body>
 </html>
