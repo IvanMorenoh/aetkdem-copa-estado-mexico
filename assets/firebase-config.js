@@ -15,19 +15,31 @@ window.AETKDEM_FIREBASE_CONFIG = {
   const style = document.createElement("style");
   style.id = "aetkdem-global-header-rules";
   style.textContent = `
-    .brand-mark.brand-mark-real {
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-      background: #fff;
-      border-color: #d4d7dc;
+    .brand.brand-logo-ready {
+      display: inline-flex;
+      width: min(430px, 100%);
+      padding-right: 0;
     }
 
-    .brand-mark-real .brand-logo-image {
-      width: 152%;
-      max-width: none;
+    .brand-full-logo {
+      width: 100%;
       height: auto;
-      transform: translateY(-8%);
+      max-height: 108px;
+      object-fit: contain;
+    }
+
+    .brand-row-inner {
+      min-height: 132px;
+    }
+
+    @media (max-width: 900px) {
+      .brand.brand-logo-ready {
+        width: min(360px, 100%);
+      }
+
+      .brand-row-inner {
+        min-height: 116px;
+      }
     }
 
     @media (max-width: 700px) {
@@ -35,31 +47,44 @@ window.AETKDEM_FIREBASE_CONFIG = {
     }
 
     @media (max-width: 620px) {
-      .brand-mark-real .brand-logo-image {
-        width: 156%;
-        transform: translateY(-7%);
+      .brand.brand-logo-ready {
+        width: min(310px, 100%);
+      }
+
+      .brand-full-logo {
+        max-height: 88px;
+      }
+
+      .brand-row-inner {
+        min-height: 104px;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .brand.brand-logo-ready {
+        width: min(280px, 100%);
       }
     }
   `;
   document.head.appendChild(style);
 })();
 
-(function loadAetkdemLogoMark() {
-  const logoPath = "assets/aetkdem-logo-header.webp.base64?v=20260503-logo";
+(function loadAetkdemLogo() {
+  const logoPath = "assets/aetkdem-logo-header.webp.base64?v=20260503-logo-complete";
 
-  function applyLogoMark() {
-    const logoSrc = window.AETKDEM_LOGO_MARK_SRC;
+  function applyLogo() {
+    const logoSrc = window.AETKDEM_LOGO_SRC;
     if (!logoSrc) return;
 
-    document.querySelectorAll(".brand-mark").forEach((mark) => {
-      if (mark.dataset.logoReady === "true") return;
-      mark.classList.add("brand-mark-real");
-      mark.innerHTML = `<img class="brand-logo-image" src="${logoSrc}" alt="" aria-hidden="true">`;
-      mark.dataset.logoReady = "true";
+    document.querySelectorAll(".brand").forEach((brand) => {
+      if (brand.dataset.logoReady === "true") return;
+      brand.classList.add("brand-logo-ready");
+      brand.innerHTML = `<img class="brand-full-logo" src="${logoSrc}" alt="AETKDEM Asociación Estatal de Taekwondo del Estado de México A.C.">`;
+      brand.dataset.logoReady = "true";
     });
   }
 
-  window.AETKDEM_APPLY_LOGO_MARK = applyLogoMark;
+  window.AETKDEM_APPLY_LOGO = applyLogo;
 
   fetch(logoPath)
     .then((response) => {
@@ -67,17 +92,17 @@ window.AETKDEM_FIREBASE_CONFIG = {
       return response.text();
     })
     .then((content) => {
-      window.AETKDEM_LOGO_MARK_SRC = `data:image/webp;base64,${content.trim()}`;
-      applyLogoMark();
+      window.AETKDEM_LOGO_SRC = `data:image/webp;base64,${content.trim()}`;
+      applyLogo();
     })
     .catch(() => {
-      // Si el logo no carga, el ícono CSS original queda como respaldo.
+      // Si el logo no carga, el encabezado original queda como respaldo.
     });
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", applyLogoMark);
+    document.addEventListener("DOMContentLoaded", applyLogo);
   } else {
-    applyLogoMark();
+    applyLogo();
   }
 })();
 
@@ -114,7 +139,7 @@ window.AETKDEM_FIREBASE_CONFIG = {
     `;
 
     document.body.insertBefore(header, document.body.firstChild);
-    if (window.AETKDEM_APPLY_LOGO_MARK) window.AETKDEM_APPLY_LOGO_MARK();
+    if (window.AETKDEM_APPLY_LOGO) window.AETKDEM_APPLY_LOGO();
   }
 
   if (document.readyState === "loading") {
