@@ -17,28 +17,68 @@ window.AETKDEM_FIREBASE_CONFIG = {
   style.textContent = `
     .brand.brand-logo-ready {
       display: inline-flex;
-      width: min(430px, 100%);
-      padding-right: 0;
+      gap: 16px;
+      align-items: center;
+      width: auto;
+      max-width: 100%;
+      padding-right: 24px;
+      cursor: pointer;
     }
 
-    .brand-full-logo {
-      width: 100%;
+    .brand-logo-mark {
+      width: 78px;
+      height: 74px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 5px solid #d6dce4;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 2px 7px rgba(20, 40, 74, 0.16);
+      flex: 0 0 auto;
+    }
+
+    .brand-logo-mark img {
+      width: 142px;
+      max-width: none;
       height: auto;
-      max-height: 108px;
-      object-fit: contain;
+      transform: translateY(-22px);
+    }
+
+    .brand-logo-text {
+      display: block;
+      min-width: 0;
+    }
+
+    .brand-logo-text strong,
+    .brand-logo-text small {
+      display: block;
+    }
+
+    .brand-logo-text strong {
+      color: var(--blue-dark);
+      font-size: 39px;
+      line-height: 0.92;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .brand-logo-text small {
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 800;
+      margin-top: 5px;
+      text-transform: uppercase;
+      white-space: normal;
     }
 
     .brand-row-inner {
-      min-height: 132px;
+      min-height: 112px;
     }
 
     @media (max-width: 900px) {
-      .brand.brand-logo-ready {
-        width: min(360px, 100%);
-      }
-
       .brand-row-inner {
-        min-height: 116px;
+        min-height: 96px;
       }
     }
 
@@ -48,21 +88,33 @@ window.AETKDEM_FIREBASE_CONFIG = {
 
     @media (max-width: 620px) {
       .brand.brand-logo-ready {
-        width: min(310px, 100%);
+        gap: 10px;
+        padding-right: 0;
       }
 
-      .brand-full-logo {
-        max-height: 88px;
+      .brand-logo-mark {
+        width: 58px;
+        height: 54px;
+        border-width: 4px;
+        border-radius: 10px;
       }
 
-      .brand-row-inner {
-        min-height: 104px;
+      .brand-logo-mark img {
+        width: 105px;
+        transform: translateY(-16px);
       }
-    }
 
-    @media (max-width: 390px) {
-      .brand.brand-logo-ready {
-        width: min(280px, 100%);
+      .brand-logo-text {
+        max-width: 220px;
+      }
+
+      .brand-logo-text strong {
+        font-size: 28px;
+      }
+
+      .brand-logo-text small {
+        font-size: 10px;
+        line-height: 1.15;
       }
     }
   `;
@@ -70,7 +122,7 @@ window.AETKDEM_FIREBASE_CONFIG = {
 })();
 
 (function loadAetkdemLogo() {
-  const logoPath = "assets/aetkdem-logo-header.webp.base64?v=20260503-logo-complete";
+  const logoPath = "assets/aetkdem-logo-header.webp.base64?v=20260503-logo-mark-text";
 
   function applyLogo() {
     const logoSrc = window.AETKDEM_LOGO_SRC;
@@ -79,7 +131,15 @@ window.AETKDEM_FIREBASE_CONFIG = {
     document.querySelectorAll(".brand").forEach((brand) => {
       if (brand.dataset.logoReady === "true") return;
       brand.classList.add("brand-logo-ready");
-      brand.innerHTML = `<img class="brand-full-logo" src="${logoSrc}" alt="AETKDEM Asociación Estatal de Taekwondo del Estado de México A.C.">`;
+      brand.innerHTML = `
+        <span class="brand-logo-mark" aria-hidden="true">
+          <img src="${logoSrc}" alt="">
+        </span>
+        <span class="brand-logo-text">
+          <strong>AETKDEM</strong>
+          <small>Asociación Estatal de Taekwondo del Estado de México A.C.</small>
+        </span>
+      `;
       brand.dataset.logoReady = "true";
     });
   }
