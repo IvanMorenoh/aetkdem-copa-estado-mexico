@@ -55,14 +55,41 @@ a {
   justify-content: flex-end;
 }
 
-.admin-shortcut {
+.admin-session-actions {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+}
+
+.admin-shortcut,
+.admin-logout-shortcut {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 7px 12px;
+  border: 0;
   border-left: 1px solid rgba(255, 255, 255, 0.24);
   border-right: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 0;
+  background: transparent;
+  color: #fff;
   font-size: 12px;
   font-weight: 800;
   opacity: 0.95;
   text-transform: uppercase;
+}
+
+.admin-logout-shortcut {
+  border-left: 0;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.admin-logout-shortcut:hover,
+.admin-logout-shortcut:focus-visible,
+.admin-shortcut:hover,
+.admin-shortcut:focus-visible {
+  background: var(--green);
 }
 
 .brand-row {
@@ -268,6 +295,17 @@ a {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 28px;
+}
+
+.news-card,
+.notice-card,
+event-item,
+.media-item {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(18, 54, 96, 0.1);
 }
 
 .news-card,
