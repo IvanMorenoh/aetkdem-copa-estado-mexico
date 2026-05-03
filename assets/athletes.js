@@ -2,22 +2,10 @@
   const athleteStorageKey = "aetkdem-athletes";
 
   const fieldAliases = {
-    rama: ["rama", "genero", "género", "sexo", "categoria rama", "categoría rama", "branch"],
-    categoria: ["categoria", "categoría", "cat", "category", "clase", "edad", "division de edad", "división de edad"],
-    division: ["division", "división", "peso", "categoria de peso", "categoría de peso", "division peso", "división peso", "kg"],
-    nombre: [
-      "nombre",
-      "atleta",
-      "competidor",
-      "competidora",
-      "nombre del competidor",
-      "nombre del atleta",
-      "nombre completo",
-      "participante",
-      "deportista",
-      "alumno",
-      "alumna",
-    ],
+    rama: ["rama", "genero", "género", "sexo"],
+    categoria: ["categoria", "categoría", "cat", "category", "clase", "edad"],
+    division: ["division", "división", "peso", "categoria de peso", "categoría de peso", "kg"],
+    nombre: ["nombre", "atleta", "competidor", "competidora", "nombre del competidor", "nombre del atleta", "nombre completo", "participante", "deportista"],
     escuela: ["escuela", "academia", "club", "institucion", "institución", "equipo", "dojang", "asociacion", "asociación"],
     entrenador: ["entrenador", "coach", "profesor", "maestro", "instructor"],
     grado: ["grado", "cinta", "cinturon", "cinturón", "kup", "dan"],
@@ -52,14 +40,15 @@
     const category = normalize(value);
     if (category === "cadete" || category === "cadet") return "cadetes";
     if (category === "juvenil" || category === "junior") return "junior";
+    if (category === "adulto" || category === "adultos" || category === "adult" || category === "senior") return "senior";
     if (category === "infantiles") return "infantil";
     return category;
   }
 
   function normalizeRama(value) {
     const rama = normalize(value);
-    if (["f", "fem", "femenino", "mujer", "mujeres", "female"].includes(rama)) return "femenil";
-    if (["m", "masc", "masculino", "hombre", "hombres", "male"].includes(rama)) return "varonil";
+    if (["f", "fem", "femenino", "femenil", "mujer", "mujeres", "female"].includes(rama)) return "femenil";
+    if (["m", "masc", "masculino", "varonil", "hombre", "hombres", "male"].includes(rama)) return "varonil";
     return rama;
   }
 
@@ -79,7 +68,7 @@
   }
 
   function normalizeAthlete(row, defaults = {}) {
-    const athlete = {
+    return {
       rama: normalizeRama(getValue(row, "rama") || defaults.rama),
       categoria: normalizeCategory(getValue(row, "categoria") || defaults.categoria),
       division: cleanDivision(getValue(row, "division") || defaults.division),
@@ -88,8 +77,6 @@
       entrenador: getValue(row, "entrenador"),
       grado: getValue(row, "grado"),
     };
-
-    return athlete;
   }
 
   function getAthletes() {
@@ -143,11 +130,7 @@
   }
 
   function makeDivisionUrl(rama, categoria, division) {
-    const params = new URLSearchParams({
-      rama,
-      categoria,
-      division: cleanDivision(division),
-    });
+    const params = new URLSearchParams({ rama, categoria, division: cleanDivision(division) });
     return `atletas-division-copa-estado-mexico.html?${params.toString()}`;
   }
 
@@ -163,9 +146,7 @@
     });
 
     document.querySelectorAll("[data-rama][data-categoria][data-division]").forEach((link) => {
-      const rama = link.dataset.rama;
-      const categoria = link.dataset.categoria;
-      const division = link.dataset.division;
+      const { rama, categoria, division } = link.dataset;
       const athletes = filterAthletes({ rama, categoria, division });
       link.href = makeDivisionUrl(rama, categoria, division);
 
@@ -267,7 +248,7 @@
 
   function makeImportMessage(result) {
     if (result.imported) return `Se cargaron ${result.imported} atletas.`;
-    return "Se cargaron 0 atletas. Revisa que el archivo tenga nombre y división; rama/categoría pueden venir en columnas o desde esta pantalla.";
+    return "Se cargaron 0 atletas. Revisa que el archivo tenga columnas de nombre y división.";
   }
 
   async function importAthletesFile(file, defaults = {}) {
@@ -303,9 +284,7 @@
         if (!file) return;
 
         try {
-          if (!(await currentUserCanWrite())) {
-            throw new Error("not-admin");
-          }
+          if (!(await currentUserCanWrite())) throw new Error("not-admin");
           const result = await importAthletesFile(file, defaultsFromUploadButton(button));
           if (status) status.textContent = makeImportMessage(result);
           updateDivisionLinks();
