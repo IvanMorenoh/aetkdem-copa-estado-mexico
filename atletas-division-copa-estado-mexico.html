@@ -4,23 +4,23 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>División | Copa Estado de México</title>
-    <link rel="stylesheet" href="styles.css?v=20260429-admin-excel" />
+    <link rel="stylesheet" href="styles.css?v=20260503-admin-logout" />
     <link rel="stylesheet" href="responsive.css?v=20260503-mobile-pass" />
+    <link rel="stylesheet" href="division-header.css?v=20260503-sticky-division" />
   </head>
   <body>
-    <main class="wrap detail-page">
-      <a class="back-link" href="atletas-registrados-copa-estado-mexico.html">Regresar a ramas</a>
-
-      <section class="detail-hero">
-        <p class="kicker">Atletas registrados</p>
+    <main class="wrap detail-page division-detail-page">
+      <section class="detail-hero division-sticky-card">
+        <a class="division-back-button" id="division-back-link" href="atletas-registrados-copa-estado-mexico.html">Regresar</a>
+        <p class="kicker">Atletas Registrados</p>
         <h1 id="division-title">División</h1>
-        <p id="division-subtitle">Consulta por categoría y división</p>
+        <p id="division-subtitle">Total de atletas registrados</p>
       </section>
 
-      <section class="detail-card" id="division-athletes"></section>
+      <section class="detail-card division-athlete-card" id="division-athletes"></section>
     </main>
 
     <script src="assets/firebase-config.js?v=20260429-firebase-admin"></script>
-    <script src="assets/athletes.js?v=20260502-g3-batch"></script>
+    <script src="assets/athletes.js?v=20260503-sticky-division"></script>
   </body>
 </html>
