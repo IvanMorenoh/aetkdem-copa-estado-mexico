@@ -9,6 +9,19 @@ window.AETKDEM_FIREBASE_CONFIG = {
   appId: "1:982082346203:web:6245281b007a6b7a7d00fe",
 };
 
+(function injectGlobalHeaderRules() {
+  if (document.querySelector("#aetkdem-global-header-rules")) return;
+
+  const style = document.createElement("style");
+  style.id = "aetkdem-global-header-rules";
+  style.textContent = `
+    @media (max-width: 700px) {
+      .social-strip { display: block !important; }
+    }
+  `;
+  document.head.appendChild(style);
+})();
+
 (function injectAetkdemHeader() {
   function insertHeader() {
     if (!document.body || document.querySelector(".site-header")) return;
