@@ -1,0 +1,38 @@
+.gender-selection {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  justify-content: stretch;
+  gap: clamp(16px, 2.4vw, 28px);
+  align-items: start;
+}
+
+.gender-card {
+  justify-items: center;
+  text-align: center;
+}
+
+.gender-card span {
+  min-height: 2.4em;
+  display: grid;
+  place-items: center;
+  font-size: clamp(16px, 1.45vw, 20px);
+  line-height: 1.16;
+}
+
+.gender-card img {
+  object-position: center top;
+}
+
+@media (max-width: 900px) {
+  .gender-selection {
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+    gap: 26px;
+  }
+}
+
+@media (max-width: 700px) {
+  .gender-selection {
+    width: min(360px, 100%);
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
