@@ -81,12 +81,18 @@ export async function logoutAdmin() {
   return signOut(auth);
 }
 
-export async function replaceAthletes(athletes) {
+export async function deleteAthletes() {
   requireConfigured();
   const existing = await getDocs(collection(db, "athletes"));
   await commitChunkedBatch(existing.docs, (batch, snapshot) => {
     batch.delete(snapshot.ref);
   });
+  return existing.size;
+}
+
+export async function replaceAthletes(athletes) {
+  requireConfigured();
+  await deleteAthletes();
 
   const uploadedAt = new Date().toISOString();
   await commitChunkedBatch(athletes, (batch, athlete, index) => {
