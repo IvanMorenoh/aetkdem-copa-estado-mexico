@@ -14,11 +14,11 @@ window.AETKDEM_FIREBASE_CONFIG = {
 
   const stylesheet = document.createElement("link");
   stylesheet.rel = "stylesheet";
-  stylesheet.href = "scroll-top.css?v=20260503-scroll-top";
+  stylesheet.href = "scroll-top.css?v=20260503-scroll-top-sensitive";
   document.head.appendChild(stylesheet);
 
   const script = document.createElement("script");
-  script.src = "assets/scroll-top.js?v=20260503-scroll-top";
+  script.src = "assets/scroll-top.js?v=20260503-scroll-top-sensitive";
   script.defer = true;
   document.head.appendChild(script);
 })();
