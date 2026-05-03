@@ -9,6 +9,48 @@ window.AETKDEM_FIREBASE_CONFIG = {
   appId: "1:982082346203:web:6245281b007a6b7a7d00fe",
 };
 
+(function injectAetkdemHeader() {
+  function insertHeader() {
+    if (!document.body || document.querySelector(".site-header")) return;
+
+    const header = document.createElement("header");
+    header.className = "site-header site-header-injected";
+    header.innerHTML = `
+      <div class="social-strip">
+        <div class="wrap strip-inner">
+          <div class="admin-session-actions">
+            <a class="admin-shortcut" href="admin.html">Admin</a>
+            <button class="admin-logout-shortcut admin-only" type="button" data-admin-logout hidden aria-hidden="true">Cerrar sesión</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="brand-row">
+        <div class="wrap brand-row-inner">
+          <a class="brand" href="index.html" aria-label="Inicio">
+            <span class="brand-mark" aria-hidden="true">
+              <span class="mark-swoosh mark-green"></span>
+              <span class="mark-swoosh mark-blue"></span>
+            </span>
+            <span>
+              <strong>AETKDEM</strong>
+              <small>Asociación Estatal de Taekwondo del Estado de México A.C.</small>
+            </span>
+          </a>
+        </div>
+      </div>
+    `;
+
+    document.body.insertBefore(header, document.body.firstChild);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", insertHeader);
+  } else {
+    insertHeader();
+  }
+})();
+
 (function loadScrollTopControl() {
   if (document.querySelector('link[href^="scroll-top.css"]')) return;
 
