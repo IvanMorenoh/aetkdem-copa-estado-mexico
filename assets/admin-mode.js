@@ -1,22 +1,28 @@
-import { firebaseReady, isAdminUser, watchAdmin } from "./firebase-app.js";
+import { firebaseReady, isAdminUser, watchAdmin } from "./firebase-app.js?v=20260502-batch-writes";
 
-function hideAdminControls() {
-  document.documentElement.classList.remove("is-admin");
-}
+const adminSelector = ".admin-only";
 
-function showAdminControls() {
-  document.documentElement.classList.add("is-admin");
-}
+function setAdminControlsVisible(isVisible) {
+  document.documentElement.classList.toggle("is-admin", isVisible);
 
-hideAdminControls();
-
-if (firebaseReady()) {
-  watchAdmin(async (user) => {
-    if (user && (await isAdminUser(user))) {
-      showAdminControls();
-    } else {
-      hideAdminControls();
-    }
+  document.querySelectorAll(adminSelector).forEach((element) => {
+    element.hidden = !isVisible;
+    element.setAttribute("aria-hidden", String(!isVisible));
   });
 }
 
+setAdminControlsVisible(false);
+
+if (firebaseReady()) {
+  watchAdmin(async (user) => {
+    try {
+      const hasAccess = user ? await isAdminUser(user) : false;
+      setAdminControlsVisible(Boolean(user && hasAccess));
+    } catch (error) {
+      console.error("No se pudo validar el acceso de administrador", error);
+      setAdminControlsVisible(false);
+    }
+  });
+} else {
+  setAdminControlsVisible(false);
+}
