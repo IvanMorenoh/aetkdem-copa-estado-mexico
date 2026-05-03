@@ -60,7 +60,10 @@
           />
         </a>
         <div class="gender-admin-action admin-only" hidden aria-hidden="true">
-          <button class="category-admin-button" type="button" data-athlete-upload-button>Cargar Excel</button>
+          <div class="form-actions">
+            <button class="category-admin-button" type="button" data-athlete-upload-button>Cargar Excel</button>
+            <button class="category-admin-button secondary" type="button" data-athlete-delete-button>Eliminar atletas</button>
+          </div>
           <input class="visually-hidden" type="file" accept=".xlsx,.xls,.csv" data-athlete-upload-input />
           <p class="upload-status" data-athlete-upload-status></p>
         </div>
@@ -77,7 +80,7 @@
     </footer>
     <script src="assets/firebase-config.js?v=20260429-firebase-admin"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <script src="assets/athletes.js?v=20260502-g3-batch"></script>
+    <script src="assets/athletes.js?v=20260503-delete-athletes"></script>
     <script type="module" src="assets/admin-mode.js?v=20260503-admin-logout"></script>
   </body>
 </html>
