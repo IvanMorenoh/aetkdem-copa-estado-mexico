@@ -9,7 +9,7 @@
     button.className = "scroll-top-button";
     button.type = "button";
     button.setAttribute("aria-label", "Volver arriba");
-    button.textContent = "↑";
+    button.textContent = "▲";
     document.body.appendChild(button);
     return button;
   }
