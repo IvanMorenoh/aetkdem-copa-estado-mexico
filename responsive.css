@@ -1,0 +1,445 @@
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+button,
+.button-link,
+.back-link,
+.edit-link,
+.event-link,
+.admin-event-link,
+.category-admin-button,
+.registered-badge {
+  line-height: 1.15;
+  text-align: center;
+}
+
+.site-header,
+main,
+.site-footer {
+  min-width: 0;
+}
+
+.news-card,
+.notice-card,
+.event-item,
+.media-item,
+.detail-card,
+.category-card,
+.admin-login-card,
+.admin-wide-panel {
+  min-width: 0;
+}
+
+@media (max-width: 1024px) {
+  .wrap {
+    width: min(100% - 28px, 960px);
+  }
+
+  .content-grid {
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 22px;
+  }
+
+  .cards-grid,
+  .media-grid {
+    gap: 18px;
+  }
+
+  .division-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .wrap {
+    width: min(100% - 24px, 760px);
+  }
+
+  .brand-row-inner {
+    justify-content: center;
+    min-height: auto;
+    padding: 18px 0;
+  }
+
+  .brand {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .brand small {
+    max-width: 42rem;
+    white-space: normal;
+  }
+
+  .nav-inner {
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .menu-toggle {
+    min-width: 48px;
+    padding: 0 12px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .nav-menu,
+  .nav-menu.is-open {
+    grid-template-columns: 1fr;
+    overflow: hidden;
+    border-radius: 6px;
+  }
+
+  .nav-menu a {
+    padding: 0 14px;
+    font-size: 12px;
+  }
+
+  .hero {
+    height: clamp(300px, 58vw, 440px);
+  }
+
+  .hero img {
+    object-position: center top;
+  }
+
+  .hero-caption {
+    bottom: 28px;
+    width: min(620px, calc(100% - 32px));
+  }
+
+  .hero h1 {
+    font-size: clamp(30px, 7vw, 46px);
+  }
+
+  .content-grid,
+  .convocatoria-layout,
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .side-column {
+    padding-top: 0;
+  }
+
+  .notice-card img {
+    height: clamp(170px, 40vw, 240px);
+  }
+
+  .news-card img,
+  .media-item img {
+    height: clamp(150px, 32vw, 210px);
+  }
+
+  .detail-page {
+    padding: 26px 0 44px;
+  }
+
+  .detail-hero {
+    padding: 24px 22px;
+  }
+
+  .detail-hero h1 {
+    font-size: clamp(32px, 8vw, 52px);
+    line-height: 1.05;
+  }
+
+  .detail-card {
+    padding: 20px;
+  }
+
+  .admin-panel-header,
+  .admin-event-row {
+    padding: 18px;
+  }
+
+  .division-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .wrap {
+    width: min(100% - 20px, 620px);
+  }
+
+  .social-strip {
+    display: none;
+  }
+
+  .brand-row-inner {
+    padding: 14px 0;
+  }
+
+  .brand {
+    align-items: center;
+  }
+
+  .brand strong {
+    font-size: 30px;
+  }
+
+  .brand small {
+    font-size: 10px;
+    line-height: 1.25;
+  }
+
+  .main-nav .nav-menu.is-open {
+    margin-top: 8px;
+  }
+
+  .hero {
+    height: 360px;
+  }
+
+  .hero::after {
+    background: linear-gradient(180deg, rgba(6, 35, 69, 0.22), rgba(6, 35, 69, 0.82));
+  }
+
+  .hero-caption {
+    left: 16px;
+    bottom: 22px;
+    width: calc(100% - 32px);
+  }
+
+  .hero h1 {
+    font-size: clamp(28px, 9vw, 38px);
+  }
+
+  .ticker {
+    min-height: auto;
+    padding: 11px 12px;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  .content-grid {
+    padding: 26px 0 42px;
+  }
+
+  .section-block {
+    margin-bottom: 34px;
+  }
+
+  .section-title h2,
+  .side-column h2,
+  .admin-card h2 {
+    font-size: 30px;
+  }
+
+  .cards-grid,
+  .media-grid,
+  .info-grid,
+  .rules-grid,
+  .footer-links {
+    grid-template-columns: 1fr;
+  }
+
+  .media-band {
+    padding: 16px;
+  }
+
+  .event-item {
+    padding: 16px;
+  }
+
+  .footer-links a {
+    padding: 11px 12px;
+  }
+
+  .footer-main {
+    padding: 24px 0;
+  }
+
+  .page-actions,
+  .form-actions,
+  .admin-event-actions {
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .page-actions > *,
+  .form-actions > *,
+  .admin-event-actions > * {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .admin-top {
+    padding: 22px 0;
+  }
+
+  .admin-top h1,
+  .admin-panel-header h2 {
+    font-size: 28px;
+    line-height: 1.1;
+  }
+
+  .admin-login-card,
+  .admin-card,
+  .detail-card,
+  .category-card {
+    padding: 18px;
+  }
+
+  .admin-panel-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .gender-selection {
+    width: min(360px, 100%);
+    gap: 28px;
+    padding: 30px 0 48px;
+  }
+
+  .gender-card {
+    text-align: center;
+  }
+
+  .gender-card img {
+    aspect-ratio: 4 / 4.6;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .gender-admin-action {
+    margin-top: -8px;
+  }
+
+  .category-heading-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .category-heading h2 {
+    font-size: 28px;
+  }
+
+  .category-upload,
+  .category-upload .category-admin-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .division-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .division-card {
+    min-height: 58px;
+    padding: 8px;
+    font-size: 18px;
+  }
+
+  .athlete-table {
+    min-width: 520px;
+  }
+
+  .athlete-table th,
+  .athlete-table td {
+    padding: 10px 8px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 430px) {
+  .wrap {
+    width: min(100% - 18px, 390px);
+  }
+
+  .brand-mark {
+    flex: 0 0 auto;
+    width: 52px;
+    height: 50px;
+  }
+
+  .brand strong {
+    font-size: 26px;
+  }
+
+  .brand span:last-child {
+    max-width: none;
+    min-width: 0;
+  }
+
+  .hero {
+    height: 330px;
+  }
+
+  .hero h1 {
+    font-size: 28px;
+  }
+
+  .section-title h2,
+  .side-column h2 {
+    font-size: 28px;
+  }
+
+  .detail-hero {
+    border-left-width: 4px;
+    padding: 20px 16px;
+  }
+
+  .detail-hero h1 {
+    font-size: 31px;
+  }
+
+  .detail-hero p:last-child {
+    font-size: 15px;
+    line-height: 1.35;
+  }
+
+  .back-link,
+  .edit-link,
+  .button-link,
+  .event-link,
+  .registered-badge {
+    width: 100%;
+    justify-content: center;
+    padding: 0 12px;
+  }
+
+  .event-date {
+    grid-template-columns: 1fr;
+  }
+
+  .event-date-days,
+  .event-date-year {
+    justify-self: center;
+  }
+
+  .info-grid div,
+  .detail-card,
+  .category-card {
+    border-radius: 7px;
+  }
+
+  .gender-selection {
+    width: min(310px, 100%);
+  }
+
+  .gender-card img {
+    aspect-ratio: 4 / 4.3;
+  }
+
+  .division-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .division-card {
+    font-size: 17px;
+  }
+
+  .upload-status {
+    font-size: 14px;
+    line-height: 1.35;
+  }
+}
