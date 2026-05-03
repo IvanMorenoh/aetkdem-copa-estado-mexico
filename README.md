@@ -16,6 +16,10 @@ Sitio web estatico para la Asociacion Estatal de Taekwondo del Estado de Mexico 
 - `assets/firebase-app.js`: funciones de Firebase Auth y Firestore.
 - `assets/firebase-config.js`: configuracion publica del proyecto Firebase.
 
+## Publicacion con Vercel
+
+El proyecto esta conectado a Vercel desde la rama `main`. Cada cambio confirmado en GitHub debe crear un deployment nuevo automaticamente.
+
 ## Publicacion con GitHub Pages
 
 1. Entra al repositorio en GitHub.
@@ -35,6 +39,8 @@ El archivo puede ser `.xlsx`, `.xls` o `.csv`. La primera hoja debe tener encabe
 | --- | --- | --- | --- | --- | --- | --- |
 | femenil | cadetes | -41 | Nombre de atleta | Escuela | Entrenador | Cinta negra |
 | varonil | junior | -55 | Nombre de atleta | Escuela | Entrenador | Cinta roja |
+
+Tambien se reconoce el formato de la hoja `CONCENTRADO G3` con columnas `INSTITUCION`, `NOMBRE DEL COMPETIDOR`, `CATEGORIA`, `RAMA` y `DIVISION`.
 
 Alias aceptados:
 
