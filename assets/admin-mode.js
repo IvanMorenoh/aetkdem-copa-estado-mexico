@@ -1,6 +1,7 @@
-import { firebaseReady, isAdminUser, watchAdmin } from "./firebase-app.js?v=20260502-batch-writes";
+import { firebaseReady, isAdminUser, logoutAdmin, watchAdmin } from "./firebase-app.js?v=20260502-batch-writes";
 
 const adminSelector = ".admin-only";
+const logoutSelector = "[data-admin-logout]";
 
 function setAdminControlsVisible(isVisible) {
   document.documentElement.classList.toggle("is-admin", isVisible);
@@ -11,7 +12,25 @@ function setAdminControlsVisible(isVisible) {
   });
 }
 
+function bindLogoutButtons() {
+  document.querySelectorAll(logoutSelector).forEach((button) => {
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      try {
+        await logoutAdmin();
+        localStorage.removeItem("aetkdem-admin-mode");
+        setAdminControlsVisible(false);
+      } catch (error) {
+        console.error("No se pudo cerrar la sesión de administrador", error);
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+}
+
 setAdminControlsVisible(false);
+bindLogoutButtons();
 
 if (firebaseReady()) {
   watchAdmin(async (user) => {
